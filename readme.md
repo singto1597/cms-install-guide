@@ -162,11 +162,33 @@ Restart=on-failure
 WantedBy=multi-user.target
 ```
 
-พอสร้างเสร็จ 3 ไฟล์ รันคำสั่งนี้เพื่อเปิดใช้งานตอนเปิดเครื่อง:
+### 4. Proxy Service:
+```bash
+sudo nano /etc/systemd/system/cms-proxy.service
+```
+ใส่โค้ดนี้:
+```ini
+[Unit]
+Description=CMS Proxy Service
+Requires=cms-log.service cms-ranking.service
+After=cms-log.service cms-ranking.service
+
+[Service]
+Type=simple
+User=singto1597
+ExecStart=/home/singto1597/cms_venv/bin/cmsProxyService -c ALL
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+พอสร้างเสร็จ 4 ไฟล์ รันคำสั่งนี้เพื่อเปิดใช้งานตอนเปิดเครื่อง:
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable cms-log cms-resource cms-ranking
-sudo systemctl start cms-log cms-resource cms-ranking
+sudo systemctl enable cms-log cms-resource cms-ranking cms-proxy
+sudo systemctl start cms-log cms-resource cms-ranking cms-proxy
 ```
 
 ---
